@@ -1,34 +1,34 @@
 # Beverage Retail Database — Design, Implementation & Analytics
 
-> **One‑sentence description:** End‑to‑end relational database for a beverage chain covering orders, inventory, logistics, promotions, and feedback, with SQL reports and BI (regression + ARIMA) for operational decisions. 
+> End‑to‑end relational database for a beverage chain covering orders, inventory, logistics, promotions, and feedback, with SQL reports and BI (regression + ARIMA) for operational decisions. 
 
 ---
 
 ## 1️⃣ Project Overview
-This repository documents a complete database solution for **Notting’s Taste**, a fast‑growing beverage brand. It covers the full lifecycle: **conceptual design → logical schema → SQL implementation → data visualization → business intelligence (regression & ARIMA forecasting)** to support strategic decisions on **store expansion, channel mix, and product portfolio**. 【60†UG‑DDI Database Design Report】
+This repository documents a complete database solution for **Notting’s Taste**, a fast‑growing beverage brand. It covers the full lifecycle: **conceptual design → logical schema → SQL implementation → data visualization → business intelligence (regression & ARIMA forecasting)** to support strategic decisions on **store expansion, channel mix, and product portfolio**. 
 
-**Why this matters.** The company’s expansion created unstable profits and data silos. The new database integrates **orders, stock, deliveries, suppliers, discounts/ads, invoices, and customer feedback** so HQ can analyze profitability, detect bottlenecks, and optimize operations. 【60†UG‑DDI Database Design Report】
+**Why this matters.** The company’s expansion created unstable profits and data silos. The new database integrates **orders, stock, deliveries, suppliers, discounts/ads, invoices, and customer feedback** so HQ can analyze profitability, detect bottlenecks, and optimize operations. 
 
 ---
 
 ## 2️⃣ Business Context & Requirements
-- Pre‑made tea line launched in 2022; stores grew from 15 (Ningbo) to 175 nationwide, but **store income fluctuates** and **profit margins lag**. The legacy database can’t explain the causes. 【60†UG‑DDI Database Design Report】  
+- Pre‑made tea line launched in 2022; stores grew from 15 (Ningbo) to 175 nationwide, but **store income fluctuates** and **profit margins lag**. The legacy database can’t explain the causes. 
 - The new system must support three goals:  
   1) **Third‑party analysis** (supplier/logistics performance),  
   2) **Store operations** (orders, inventory, staffing, invoicing),  
-  3) **Product performance** (cost, price, discounts, acceptance). 【60†UG‑DDI Database Design Report】
+  3) **Product performance** (cost, price, discounts, acceptance). 
 
 **Key business rules (selected):**  
 - Materials auto‑deduct when products are made; warehouse auto‑updates upon supplier receipt.  
 - Delivery orders forward customer info to logistics; pickup orders issue a pickup code automatically.  
 - Discounts require daily manual confirmation; invoices auto‑generated for both materials and sales.  
 - Each shop has **one manager**; other staff can check stock and process orders.  
-- Real‑time updates and **historical data retention** (sample demo shows one day). 【60†UG‑DDI Database Design Report】
+- Real‑time updates and **historical data retention** (sample demo shows one day). 
 
 ---
 
 ## 3️⃣ System Architecture (Conceptual Design)
-**Core modules:** orders, customer services, logistics, stock, advertising, staff (see ER model). 【60†UG‑DDI Database Design Report】
+**Core modules:** orders, customer services, logistics, stock, advertising, staff (see ER model). 
 
 **Main entities (excerpt):**  
 - **Customer, Staff, Shop, Supplier, LogisticsProvider** — actors and locations  
@@ -38,9 +38,9 @@ This repository documents a complete database solution for **Notting’s Taste**
 - **CustomerFeedback** — NPS/ratings on product, shop, logistics  
 - **Invoices (SaleInvoice, PurchaseInvoice)** — accounting integration  
 - **DeliveryRecord, PickUpRecord, InventoryInRecord, InventoryOutRecord** — execution logs  
-All entities include properly defined **PK/FK constraints, data types, and nullability** (see Data Dictionary). 【60†UG‑DDI Database Design Report】
+All entities include properly defined **PK/FK constraints, data types, and nullability** (see Data Dictionary). 
 
-> 💡 *ERD tip:* Keep relationship attributes in relationship tables; do not replicate FKs in entities twice; mark PK/FK clearly. 【60†UG‑DDI Database Design Report】
+> 💡 *ERD tip:* Keep relationship attributes in relationship tables; do not replicate FKs in entities twice; mark PK/FK clearly. 
 
 ---
 
@@ -52,7 +52,7 @@ The report provides a comprehensive dictionary with attribute semantics, types, 
 - **Order**(`Order_ID` PK, `Customer_ID` FK, `Staff_ID` FK, `oDate`, `oTime`, `oTotalPrice`, `oType` {On/Off}, `oChannelType` {P/D})  
 - **Warehouse**(composite PK: `WH_ID`,`Material_ID`, `whCurrentQuantity`)  
 - **DeliveryRecord**(PK: `LP_ID`,`Order_ID`,`Customer_ID`, with expected/actual time, timeout flag & status)  
-- **Promotion & Discount** via `AdvertisementItem` and `DiscountedItem` junction tables. 【60†UG‑DDI Database Design Report】
+- **Promotion & Discount** via `AdvertisementItem` and `DiscountedItem` junction tables. 
 
 ---
 
@@ -62,9 +62,9 @@ The logical model normalizes core entities and junctions with **composite PKs** 
 - `ProductComponent` PK(`Product_ID`,`Material_ID`) links BOM to materials.  
 - `SaleInvoice` PK(`Shop_ID`,`Order_ID`); `PurchaseInvoice` PK(`Shop_ID`,`MO_ID`).  
 - `AdvertisementItem` PK(`Product_ID`,`AD_ID`); store `adiStartDate/adiEndDate/adiCost`.  
-- `DiscountedItem` PK(`Product_ID`,`DE_ID`); store `dpDiscountedPrice`. 【60†UG‑DDI Database Design Report】
+- `DiscountedItem` PK(`Product_ID`,`DE_ID`); store `dpDiscountedPrice`. 
 
-> 🧭 **Workflows covered:** Order‑to‑Cash, Procure‑to‑Stock, Promotions, and Feedback‑to‑Action. 【60†UG‑DDI Database Design Report】
+> 🧭 **Workflows covered:** Order‑to‑Cash, Procure‑to‑Stock, Promotions, and Feedback‑to‑Action. 
 
 ---
 
@@ -81,16 +81,16 @@ Below are representative analytics/ops queries implemented and showcased in the 
 8) **Profit margin ranking** across products.  
 9) **Total sales of a shop** (by `Shop_ID`).  
 10) **Channel mix counts** (order channel × delivery channel).  
-11) **Current warehouse stock** by `Shop_ID` + `Material_ID`. 【60†UG‑DDI Database Design Report】
+11) **Current warehouse stock** by `Shop_ID` + `Material_ID`.
 
-> The report includes screenshots of results for examples like **C001**, **P001**, **ST001**, **LP001**, and **S001** to verify correctness. 【60†UG‑DDI Database Design Report】
+> The report includes screenshots of results for examples like **C001**, **P001**, **ST001**, **LP001**, and **S001** to verify correctness. 
 
 ---
 
 ## 7️⃣ Data Visualization (Ops Dashboards)
 - **Product strategy:** stacked bars for pre‑made vs fresh tea by province (sales, cost, profit); radar for margins & preference; growth trends over months; regional preference maps; word clouds for customer tastes.  
 - **Store monitoring:** store sales vs inventory; ratings map; daily order volume map.  
-- **Channel monitoring:** heatmap by hour×channel; Sankey for monthly channel flows; line chart for channel sales by hour. 【60†UG‑DDI Database Design Report】
+- **Channel monitoring:** heatmap by hour×channel; Sankey for monthly channel flows; line chart for channel sales by hour. 
 
 ---
 
@@ -101,10 +101,10 @@ Five models evaluate the effect of core drivers on **Ln(Sales)**: Temperature, A
 - **Location (1st/2nd‑tier)** ≈ **+7%** vs others; suggests reevaluating expansion mix.  
 - **Channel (online)** ≈ **+26%** vs offline; expand online presence.  
 - **Type (pre‑made)** ≈ **+20%** vs non‑pre‑made; continue the product line.  
-- **Interactions** among Location×Channel×Type are all positive (>0.3) and significant, indicating **reinforcing effects** when combined. 【60†UG‑DDI Database Design Report】
+- **Interactions** among Location×Channel×Type are all positive (>0.3) and significant, indicating **reinforcing effects** when combined.
 
 ### 8.2 Forecasting (ARIMA)
-Using one‑year historical data, ARIMA yields good fit (significant Wald test), with projected **rising sales trend** and plausible short‑term dips (e.g., launch frictions, outages). Forecast corroborates regression insights: **downsize low‑yield stores, grow online, double‑down on pre‑made**. 【60†UG‑DDI Database Design Report】
+Using one‑year historical data, ARIMA yields good fit (significant Wald test), with projected **rising sales trend** and plausible short‑term dips (e.g., launch frictions, outages). Forecast corroborates regression insights: **downsize low‑yield stores, grow online, double‑down on pre‑made**. 
 
 ---
 
@@ -157,7 +157,7 @@ psql -U <user> -d <db> -f queries/top_popular.sql
 - **Data quality:** enforce domains (`pType` in {P,F}; `oChannelType` in {P,D}); use check constraints for ratings/timeouts.  
 - **Auditing:** keep `*_Time` fields and use derived durations for SLAs (delivery expected vs actual).  
 - **Security:** grant least privilege by role (HQ analyst, store staff, logistics).  
-- **Performance:** batch updates for inventory; avoid double‑counting in promotions/discounts logic. 【60†UG‑DDI Database Design Report】
+- **Performance:** batch updates for inventory; avoid double‑counting in promotions/discounts logic. 
 
 ---
 
@@ -165,15 +165,5 @@ psql -U <user> -d <db> -f queries/top_popular.sql
 - Current sample shows **one‑day data**; integrate longer horizons for robust trends.  
 - Missing **non‑product financials** (rent, taxes, decoration) → add to improve true profitability modeling.  
 - Inventory thresholds are subjective; consider **EOQ / safety stock** logic.  
-- Add CDC/ETL to support near‑real‑time dashboards. 【60†UG‑DDI Database Design Report】
-
----
-
-## 1️⃣2️⃣ Contributors
-Renyu Jiang · Yuxiao Deng · Ziyu Liu · Zhengyi Lin · **Lanshun Yuan** (BI analysis lead) 【60†UG‑DDI Database Design Report】
-
----
-
-## 1️⃣3️⃣ License
-MIT (for schema and example SQL). Replace if your course requires a different license.
+- Add CDC/ETL to support near‑real‑time dashboards.
 
