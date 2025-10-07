@@ -1,6 +1,6 @@
 # Beverage Retail Database — Design, Implementation & Analytics
 
-> **One‑sentence description:** End‑to‑end relational database for a beverage chain covering orders, inventory, logistics, promotions, and feedback, with SQL reports and BI (regression + ARIMA) for operational decisions. 
+> End‑to‑end relational database for a beverage chain covering orders, inventory, logistics, promotions, and feedback, with SQL reports and BI (regression + ARIMA) for operational decisions. 
 
 ---
 
